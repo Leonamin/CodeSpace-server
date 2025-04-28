@@ -89,14 +89,12 @@ public class CodeSpaceService {
         codeSpaceRepository.deleteById(req.getId());
     }
 
-    public CodeSpaceEntity getCodeSpaceById(Long id) {
+    public CodeSpaceSummaryRes getCodeSpaceById(Long id) {
         final CodeSpaceEntity codeSpaceEntity = getCodeSpaceEntity(id);
-
         if (codeSpaceEntity == null) {
             throw new IllegalArgumentException("Code space not found");
         }
-
-        return codeSpaceEntity;
+        return CodeSpaceSummaryRes.fromEntity(codeSpaceEntity);
     }
 
     public Page<CodeSpaceSummaryRes> getAllCodeSpaces(Pageable pageable) {
