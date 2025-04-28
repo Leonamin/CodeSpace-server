@@ -69,24 +69,24 @@ public class CodeSpaceService {
         codeSpaceRepository.save(originCodeSpace);
     }
 
-    public void deleteCodeSpace(CodeSpaceDeleteReq req) {
-        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(req.getId());
+    public void deleteCodeSpace(Long id, String password) {
+        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(id);
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");
         }
 
-        if (req.getPassword() == null) {
+        if (password == null) {
             throw new IllegalArgumentException("Password is required");
         }
 
-        final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodeSpace.getPasswordHash());
+        final boolean isVerified = PasswordUtil.verifyPassword(password, originCodeSpace.getPasswordHash());
 
         if (!isVerified) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        codeSpaceRepository.deleteById(req.getId());
+        codeSpaceRepository.deleteById(id);
     }
 
     public CodeSpaceSummaryRes getCodeSpaceById(Long id) {
