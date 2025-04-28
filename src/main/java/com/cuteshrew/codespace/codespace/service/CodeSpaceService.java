@@ -36,8 +36,8 @@ public class CodeSpaceService {
         codeSpaceRepository.save(codeSpaceEntity);
     }
 
-    public void updateCodeSpace(CodeSpaceUpdateReq req) {
-        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(req.getId());
+    public void updateCodeSpace(Long id, CodeSpaceUpdateReq req) {
+        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(id);
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");

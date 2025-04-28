@@ -22,9 +22,9 @@ public class CodeSpaceController {
         codeSpaceService.createCodeSpace(req);
     }
 
-    @PutMapping
-    public void updateCodeSpace(@RequestBody CodeSpaceUpdateReq req) {
-        codeSpaceService.updateCodeSpace(req);
+    @PutMapping("/{id}")
+    public void updateCodeSpace(@PathVariable Long id, @RequestBody CodeSpaceUpdateReq req) {
+        codeSpaceService.updateCodeSpace(id, req);
     }
 
     @DeleteMapping("/{id}")

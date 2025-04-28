@@ -74,12 +74,12 @@ public class CodePieceService {
         codePieceRepository.save(codePieceEntity);
     }
 
-    public void updateCodePiece(CodePieceUpdateReq req) {
-        if (req.getId() == null) {
+    public void updateCodePiece(Long id, CodePieceUpdateReq req) {
+        if (id == null) {
             throw new IllegalArgumentException("id is required");
         }
 
-        final CodePieceEntity originCodePiece = getCodePieceEntity(req.getId());
+        final CodePieceEntity originCodePiece = getCodePieceEntity(id);
 
         if (originCodePiece == null) {
             throw new IllegalArgumentException("Code piece not found");
