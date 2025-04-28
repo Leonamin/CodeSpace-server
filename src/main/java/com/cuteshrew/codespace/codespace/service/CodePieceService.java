@@ -2,6 +2,7 @@ package com.cuteshrew.codespace.codespace.service;
 
 import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceCreateReq;
 import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceDetailRes;
+import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceSummaryRes;
 import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceUpdateReq;
 import com.cuteshrew.codespace.codespace.entity.CodePieceEntity;
 import com.cuteshrew.codespace.codespace.repository.CodePieceRepository;
@@ -146,7 +147,7 @@ public class CodePieceService {
         return CodePieceDetailRes.fromEntity(codePieceEntity);
     }
 
-    public Page<CodePieceDetailRes> getAllCodePieces(Long spaceId, Pageable pageable) {
-        return codePieceRepository.findAllBySpaceId(spaceId, pageable).map(CodePieceDetailRes::fromEntity);
+    public Page<CodePieceSummaryRes> getAllCodePieces(Long spaceId, Pageable pageable) {
+        return codePieceRepository.findAllBySpaceId(spaceId, pageable).map(CodePieceSummaryRes::fromEntity);
     }
 }
