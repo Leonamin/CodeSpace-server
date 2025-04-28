@@ -1,5 +1,8 @@
 package com.cuteshrew.codespace.codespace.service;
 
+import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceCreateReq;
+import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceDetailRes;
+import com.cuteshrew.codespace.codespace.dto.codepiece.CodePieceUpdateReq;
 import com.cuteshrew.codespace.codespace.entity.CodePieceEntity;
 import com.cuteshrew.codespace.codespace.repository.CodePieceRepository;
 import com.cuteshrew.codespace.codespace.util.PasswordUtil;
@@ -10,91 +13,106 @@ import org.springframework.stereotype.Service;
 @Service
 public class CodePieceService {
     final CodePieceRepository codePieceRepository;
+    final CodeSpaceService codeSpaceService;
 
-    public CodePieceService(CodePieceRepository codePieceRepository) {
+    public CodePieceService(
+            CodePieceRepository codePieceRepository,
+            CodeSpaceService codeSpaceService
+    ) {
         this.codePieceRepository = codePieceRepository;
+        this.codeSpaceService = codeSpaceService;
     }
 
-    public void createCodePiece(
-            Long spaceId, String name, String description, String language, String code, String password, String ownerName
-    ) {
-        if (spaceId == null) {
+    private CodePieceEntity getCodePieceEntity(Long id) {
+        return codePieceRepository.findById(id).orElse(null);
+    }
+
+    private boolean isCodeSpaceExist(Long spaceId) {
+        return codeSpaceService.getCodeSpaceById(spaceId) != null;
+    }
+
+    public void createCodePiece(CodePieceCreateReq req) {
+        if (req.getSpaceId() == null) {
             throw new IllegalArgumentException("spaceId is required");
         }
 
-        if (name == null) {
+        if (req.getName() == null) {
             throw new IllegalArgumentException("name is required");
         }
 
-        if (language == null) {
+        if (req.getLanguage() == null) {
             throw new IllegalArgumentException("language is required");
         }
 
-        if (code == null) {
+        if (req.getCode() == null) {
             throw new IllegalArgumentException("code is required");
         }
 
-        if (password == null) {
+        if (req.getPassword() == null) {
             throw new IllegalArgumentException("password is required");
         }
 
-        if (ownerName == null) {
+        if (req.getOwnerName() == null) {
             throw new IllegalArgumentException("ownerName is required");
         }
 
-        final String hashedPassword = PasswordUtil.hashPassword(password);
+        if (!isCodeSpaceExist(req.getSpaceId())) {
+            throw new IllegalArgumentException("Code space not found");
+        }
+
+        final String hashedPassword = PasswordUtil.hashPassword(req.getPassword());
 
         final CodePieceEntity codePieceEntity = new CodePieceEntity();
-        codePieceEntity.setSpaceId(spaceId);
-        codePieceEntity.setName(name);
-        codePieceEntity.setDescription(description);
-        codePieceEntity.setLanguage(language);
-        codePieceEntity.setCode(code);
+        codePieceEntity.setSpaceId(req.getSpaceId());
+        codePieceEntity.setName(req.getName());
+        codePieceEntity.setDescription(req.getDescription());
+        codePieceEntity.setLanguage(req.getLanguage());
+        codePieceEntity.setCode(req.getCode());
         codePieceEntity.setPasswordHash(hashedPassword);
-        codePieceEntity.setOwnerName(ownerName);
+        codePieceEntity.setOwnerName(req.getOwnerName());
 
         codePieceRepository.save(codePieceEntity);
     }
 
-    public void updateCodePiece(Long id, String name, String description, String language, String code, String password, String ownerName) {
-        if (id == null) {
+    public void updateCodePiece(CodePieceUpdateReq req) {
+        if (req.getId() == null) {
             throw new IllegalArgumentException("id is required");
         }
 
-        final CodePieceEntity originCodePiece = codePieceRepository.findById(id).orElse(null);
+        final CodePieceEntity originCodePiece = getCodePieceEntity(req.getId());
 
         if (originCodePiece == null) {
             throw new IllegalArgumentException("Code piece not found");
         }
 
-        if (password == null) {
+        if (req.getPassword() == null) {
             throw new IllegalArgumentException("Password is required");
         }
 
-        final boolean isVerified = PasswordUtil.verifyPassword(password, originCodePiece.getPasswordHash());
+        final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodePiece.getPasswordHash());
 
         if (!isVerified) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        if (name != null) {
-            originCodePiece.setName(name);
+        if (req.getName() != null) {
+            originCodePiece.setName(req.getName());
         }
 
-        if (description != null) {
-            originCodePiece.setDescription(description);
+        if (req.getDescription() != null) {
+            originCodePiece.setDescription(req.getDescription());
         }
 
-        if (language != null) {
-            originCodePiece.setLanguage(language);
+        if (req.getLanguage() != null) {
+            originCodePiece.setLanguage(req.getLanguage());
         }
 
-        if (code != null) {
-            originCodePiece.setCode(code);
+        if (req.getCode() != null) {
+            originCodePiece.setCode(req.getCode());
         }
 
-        if (ownerName != null) {
-            originCodePiece.setOwnerName(ownerName);
+        if (req.getOwnerName() != null) {
+            originCodePiece.setOwnerName(req.getOwnerName());
         }
 
         codePieceRepository.save(originCodePiece);
@@ -120,15 +138,15 @@ public class CodePieceService {
         codePieceRepository.deleteById(id);
     }
 
-    public CodePieceEntity getCodePieceById(Long id) {
+    public CodePieceDetailRes getCodePieceById(Long id) {
         final CodePieceEntity codePieceEntity = codePieceRepository.findById(id).orElse(null);
         if (codePieceEntity == null) {
             throw new IllegalArgumentException("Code piece not found");
         }
-        return codePieceEntity;
+        return CodePieceDetailRes.fromEntity(codePieceEntity);
     }
 
-    public Page<CodePieceEntity> getAllCodePieces(Long spaceId, Pageable pageable) {
-        return codePieceRepository.findAllBySpaceId(spaceId, pageable);
+    public Page<CodePieceDetailRes> getAllCodePieces(Long spaceId, Pageable pageable) {
+        return codePieceRepository.findAllBySpaceId(spaceId, pageable).map(CodePieceDetailRes::fromEntity);
     }
 }

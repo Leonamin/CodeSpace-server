@@ -1,10 +1,13 @@
 package com.cuteshrew.codespace.codespace.service;
 
+import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceCreateReq;
+import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceDeleteReq;
+import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceSummaryRes;
+import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceUpdateReq;
 import com.cuteshrew.codespace.codespace.entity.CodeSpaceEntity;
 import com.cuteshrew.codespace.codespace.repository.CodeSpaceRepository;
 import com.cuteshrew.codespace.codespace.util.PasswordUtil;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,21 +19,25 @@ public class CodeSpaceService {
         this.codeSpaceRepository = codeSpaceRepository;
     }
 
-    public void createCodeSpace(String name, String description, String password, String ownerName) {
+    private CodeSpaceEntity getCodeSpaceEntity(Long id) {
+        return codeSpaceRepository.findById(id).orElse(null);
+    }
 
-        final String hashedPassword = PasswordUtil.hashPassword(password);
+    public void createCodeSpace(CodeSpaceCreateReq req) {
+
+        final String hashedPassword = PasswordUtil.hashPassword(req.getPassword());
 
         final CodeSpaceEntity codeSpaceEntity = new CodeSpaceEntity();
-        codeSpaceEntity.setName(name);
-        codeSpaceEntity.setDescription(description);
+        codeSpaceEntity.setName(req.getName());
+        codeSpaceEntity.setDescription(req.getDescription());
         codeSpaceEntity.setPasswordHash(hashedPassword);
-        codeSpaceEntity.setOwnerName(ownerName);
+        codeSpaceEntity.setOwnerName(req.getOwnerName());
 
         codeSpaceRepository.save(codeSpaceEntity);
     }
 
-    public void updateCodeSpace(Long id, String name, String description, String password, String ownerName) {
-        final CodeSpaceEntity originCodeSpace = codeSpaceRepository.findById(id).orElse(null);
+    public void updateCodeSpace(CodeSpaceUpdateReq req) {
+        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(req.getId());
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");
@@ -38,52 +45,52 @@ public class CodeSpaceService {
 
         // TODO - hashedPassword와 전달받은 password 비교
 
-        if (password == null) {
+        if (req.getPassword() == null) {
             throw new IllegalArgumentException("Password is required");
         }
 
-        final boolean isVerified = PasswordUtil.verifyPassword(password, originCodeSpace.getPasswordHash());
+        final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodeSpace.getPasswordHash());
         if (!isVerified) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        if (name != null) {
-            originCodeSpace.setName(name);
+        if (req.getName() != null) {
+            originCodeSpace.setName(req.getName());
         }
 
-        if (description != null) {
-            originCodeSpace.setDescription(description);
+        if (req.getDescription() != null) {
+            originCodeSpace.setDescription(req.getDescription());
         }
 
-        if (ownerName != null) {
-            originCodeSpace.setOwnerName(ownerName);
+        if (req.getOwnerName() != null) {
+            originCodeSpace.setOwnerName(req.getOwnerName());
         }
 
         codeSpaceRepository.save(originCodeSpace);
     }
 
-    public void deleteCodeSpace(Long id, String password) {
-        final CodeSpaceEntity originCodeSpace = codeSpaceRepository.findById(id).orElse(null);
+    public void deleteCodeSpace(CodeSpaceDeleteReq req) {
+        final CodeSpaceEntity originCodeSpace = getCodeSpaceEntity(req.getId());
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");
         }
 
-        if (password == null) {
+        if (req.getPassword() == null) {
             throw new IllegalArgumentException("Password is required");
         }
 
-        final boolean isVerified = PasswordUtil.verifyPassword(password, originCodeSpace.getPasswordHash());
+        final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodeSpace.getPasswordHash());
 
         if (!isVerified) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        codeSpaceRepository.deleteById(id);
+        codeSpaceRepository.deleteById(req.getId());
     }
 
     public CodeSpaceEntity getCodeSpaceById(Long id) {
-        final CodeSpaceEntity codeSpaceEntity = codeSpaceRepository.findById(id).orElse(null);
+        final CodeSpaceEntity codeSpaceEntity = getCodeSpaceEntity(id);
 
         if (codeSpaceEntity == null) {
             throw new IllegalArgumentException("Code space not found");
@@ -92,7 +99,7 @@ public class CodeSpaceService {
         return codeSpaceEntity;
     }
 
-    public Page<CodeSpaceEntity> getAllCodeSpaces(Pageable pageable) {
-        return codeSpaceRepository.findAll(pageable);
+    public Page<CodeSpaceSummaryRes> getAllCodeSpaces(Pageable pageable) {
+        return codeSpaceRepository.findAll(pageable).map(CodeSpaceSummaryRes::fromEntity);
     }
 }
