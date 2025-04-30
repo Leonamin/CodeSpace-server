@@ -33,30 +33,6 @@ public class CodePieceService {
     }
 
     public void createCodePiece(CodePieceCreateReq req) {
-        if (req.getSpaceId() == null) {
-            throw new IllegalArgumentException("spaceId is required");
-        }
-
-        if (req.getName() == null) {
-            throw new IllegalArgumentException("name is required");
-        }
-
-        if (req.getLanguage() == null) {
-            throw new IllegalArgumentException("language is required");
-        }
-
-        if (req.getCode() == null) {
-            throw new IllegalArgumentException("code is required");
-        }
-
-        if (req.getPassword() == null) {
-            throw new IllegalArgumentException("password is required");
-        }
-
-        if (req.getOwnerName() == null) {
-            throw new IllegalArgumentException("ownerName is required");
-        }
-
         if (!isCodeSpaceExist(req.getSpaceId())) {
             throw new IllegalArgumentException("Code space not found");
         }
@@ -76,18 +52,10 @@ public class CodePieceService {
     }
 
     public void updateCodePiece(Long id, CodePieceUpdateReq req) {
-        if (id == null) {
-            throw new IllegalArgumentException("id is required");
-        }
-
         final CodePieceEntity originCodePiece = getCodePieceEntity(id);
 
         if (originCodePiece == null) {
             throw new IllegalArgumentException("Code piece not found");
-        }
-
-        if (req.getPassword() == null) {
-            throw new IllegalArgumentException("Password is required");
         }
 
         final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodePiece.getPasswordHash());
@@ -124,10 +92,6 @@ public class CodePieceService {
 
         if (originCodePiece == null) {
             throw new IllegalArgumentException("Code piece not found");
-        }
-
-        if (password == null) {
-            throw new IllegalArgumentException("Password is required");
         }
 
         final boolean isVerified = PasswordUtil.verifyPassword(password, originCodePiece.getPasswordHash());

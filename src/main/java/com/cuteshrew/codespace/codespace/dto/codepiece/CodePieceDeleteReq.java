@@ -8,6 +8,5 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CodePieceDeleteReq {
-    private Long id;
     private String password;
 }

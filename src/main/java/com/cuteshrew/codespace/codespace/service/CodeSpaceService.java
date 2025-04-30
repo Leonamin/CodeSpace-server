@@ -1,7 +1,6 @@
 package com.cuteshrew.codespace.codespace.service;
 
 import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceCreateReq;
-import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceDeleteReq;
 import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceSummaryRes;
 import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceUpdateReq;
 import com.cuteshrew.codespace.codespace.entity.CodeSpaceEntity;
@@ -24,7 +23,6 @@ public class CodeSpaceService {
     }
 
     public void createCodeSpace(CodeSpaceCreateReq req) {
-
         final String hashedPassword = PasswordUtil.hashPassword(req.getPassword());
 
         final CodeSpaceEntity codeSpaceEntity = new CodeSpaceEntity();
@@ -41,12 +39,6 @@ public class CodeSpaceService {
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");
-        }
-
-        // TODO - hashedPassword와 전달받은 password 비교
-
-        if (req.getPassword() == null) {
-            throw new IllegalArgumentException("Password is required");
         }
 
         final boolean isVerified = PasswordUtil.verifyPassword(req.getPassword(), originCodeSpace.getPasswordHash());
@@ -74,10 +66,6 @@ public class CodeSpaceService {
 
         if (originCodeSpace == null) {
             throw new IllegalArgumentException("Code space not found");
-        }
-
-        if (password == null) {
-            throw new IllegalArgumentException("Password is required");
         }
 
         final boolean isVerified = PasswordUtil.verifyPassword(password, originCodeSpace.getPasswordHash());

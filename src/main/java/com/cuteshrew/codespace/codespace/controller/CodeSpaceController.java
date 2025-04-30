@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,22 +19,34 @@ public class CodeSpaceController {
     private final CodeSpaceService codeSpaceService;
 
     @PostMapping
-    public void createCodeSpace(@RequestBody CodeSpaceCreateReq req) {
+    public void createCodeSpace(@RequestBody @Validated CodeSpaceCreateReq req) {
         codeSpaceService.createCodeSpace(req);
     }
 
     @PutMapping("/{id}")
-    public void updateCodeSpace(@PathVariable Long id, @RequestBody CodeSpaceUpdateReq req) {
+    public void updateCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceUpdateReq req) {
+        if (id == null) {
+            throw new IllegalArgumentException("Code piece id not found");
+        }
+
         codeSpaceService.updateCodeSpace(id, req);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCodeSpace(@PathVariable Long id, @RequestBody CodeSpaceDeleteReq req) {
+    public void deleteCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceDeleteReq req) {
+        if (id == null) {
+            throw new IllegalArgumentException("Code piece id not found");
+        }
+
         codeSpaceService.deleteCodeSpace(id, req.getPassword());
     }
 
     @GetMapping("/{id}")
     public CodeSpaceSummaryRes getCodeSpaceById(@PathVariable Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Code piece id not found");
+        }
+
         return codeSpaceService.getCodeSpaceById(id);
     }
 

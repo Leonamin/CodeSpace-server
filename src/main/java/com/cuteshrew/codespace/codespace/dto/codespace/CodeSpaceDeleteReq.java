@@ -8,6 +8,5 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CodeSpaceDeleteReq {
-    private Long id;
     private String password;
 }
