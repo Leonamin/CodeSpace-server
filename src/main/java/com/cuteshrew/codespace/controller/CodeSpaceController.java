@@ -6,11 +6,12 @@ import com.cuteshrew.codespace.dto.codespace.CodeSpaceSummaryRes;
 import com.cuteshrew.codespace.dto.codespace.CodeSpaceUpdateReq;
 import com.cuteshrew.codespace.service.CodeSpaceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/codespaces")
@@ -51,7 +52,7 @@ public class CodeSpaceController {
     }
 
     @GetMapping
-    public Page<CodeSpaceSummaryRes> getCodeSpaceList(Pageable pageable) {
-        return codeSpaceService.getAllCodeSpaces(pageable);
+    public List<CodeSpaceSummaryRes> getCodeSpaceList(Pageable pageable) {
+        return codeSpaceService.getAllCodeSpaces(pageable).getContent();
     }
 }

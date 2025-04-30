@@ -3,10 +3,11 @@ package com.cuteshrew.codespace.controller;
 import com.cuteshrew.codespace.dto.codepiece.*;
 import com.cuteshrew.codespace.service.CodePieceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/codepieces")
@@ -47,8 +48,8 @@ public class CodePieceController {
     }
 
     @GetMapping
-    public Page<CodePieceSummaryRes> getAllCodePieces(@RequestParam Long spaceId, Pageable pageable) {
-        return codePieceService.getAllCodePieces(spaceId, pageable);
+    public List<CodePieceSummaryRes> getAllCodePieces(@RequestParam Long spaceId, Pageable pageable) {
+        return codePieceService.getAllCodePieces(spaceId, pageable).getContent();
     }
 
 }
