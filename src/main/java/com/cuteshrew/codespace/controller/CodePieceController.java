@@ -1,7 +1,7 @@
-package com.cuteshrew.codespace.codespace.controller;
+package com.cuteshrew.codespace.controller;
 
-import com.cuteshrew.codespace.codespace.dto.codepiece.*;
-import com.cuteshrew.codespace.codespace.service.CodePieceService;
+import com.cuteshrew.codespace.dto.codepiece.*;
+import com.cuteshrew.codespace.service.CodePieceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

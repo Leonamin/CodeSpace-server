@@ -1,4 +1,4 @@
-package com.cuteshrew.codespace.codespace.util;
+package com.cuteshrew.codespace.util;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

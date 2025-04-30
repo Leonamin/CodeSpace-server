@@ -1,6 +1,6 @@
-package com.cuteshrew.codespace.codespace.dto.codespace;
+package com.cuteshrew.codespace.dto.codespace;
 
-import com.cuteshrew.codespace.codespace.entity.CodeSpaceEntity;
+import com.cuteshrew.codespace.entity.CodeSpaceEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

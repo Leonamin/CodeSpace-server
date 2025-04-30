@@ -1,6 +1,6 @@
-package com.cuteshrew.codespace.codespace.repository;
+package com.cuteshrew.codespace.repository;
 
-import com.cuteshrew.codespace.codespace.entity.CodePieceEntity;
+import com.cuteshrew.codespace.entity.CodePieceEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

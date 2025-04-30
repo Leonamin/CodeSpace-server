@@ -1,11 +1,11 @@
-package com.cuteshrew.codespace.codespace.service;
+package com.cuteshrew.codespace.service;
 
-import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceCreateReq;
-import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceSummaryRes;
-import com.cuteshrew.codespace.codespace.dto.codespace.CodeSpaceUpdateReq;
-import com.cuteshrew.codespace.codespace.entity.CodeSpaceEntity;
-import com.cuteshrew.codespace.codespace.repository.CodeSpaceRepository;
-import com.cuteshrew.codespace.codespace.util.PasswordUtil;
+import com.cuteshrew.codespace.dto.codespace.CodeSpaceCreateReq;
+import com.cuteshrew.codespace.dto.codespace.CodeSpaceSummaryRes;
+import com.cuteshrew.codespace.dto.codespace.CodeSpaceUpdateReq;
+import com.cuteshrew.codespace.entity.CodeSpaceEntity;
+import com.cuteshrew.codespace.repository.CodeSpaceRepository;
+import com.cuteshrew.codespace.util.PasswordUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

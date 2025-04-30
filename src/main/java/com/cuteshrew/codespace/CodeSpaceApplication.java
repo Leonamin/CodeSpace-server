@@ -1,4 +1,4 @@
-package com.cuteshrew.codespace.codespace;
+package com.cuteshrew.codespace;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

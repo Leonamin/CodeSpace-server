@@ -1,4 +1,4 @@
-package com.cuteshrew.codespace.codespace.dto.codepiece;
+package com.cuteshrew.codespace.dto.codepiece;
 
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
