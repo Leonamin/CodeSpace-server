@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CodeSpaceRepository extends JpaRepository<CodeSpaceEntity, Long> {
-    Page<CodeSpaceEntity> findAll(Pageable pageable);
+    Page<CodeSpaceEntity> findAllByDeletedAtIsNull(Pageable pageable);
 }

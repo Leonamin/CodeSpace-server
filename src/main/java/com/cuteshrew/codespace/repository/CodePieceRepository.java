@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CodePieceRepository extends JpaRepository<CodePieceEntity, Long> {
-    List<CodePieceEntity> findAllBySpaceId(Long spaceId);
+    List<CodePieceEntity> findAllBySpaceIdAndDeletedAtIsNull(Long spaceId);
 
-    Page<CodePieceEntity> findAllBySpaceId(Long spaceId, Pageable pageable);
+    Page<CodePieceEntity> findAllBySpaceIdAndDeletedAtIsNull(Long spaceId, Pageable pageable);
 
-    Page<CodePieceEntity> findCodePieceEntitiesByLanguage(String language, Pageable pageable);
+    Page<CodePieceEntity> findCodePieceEntitiesByLanguageAndDeletedAtIsNull(String language, Pageable pageable);
 }

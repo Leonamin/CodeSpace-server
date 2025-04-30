@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class CodePieceService {
     final CodePieceRepository codePieceRepository;
@@ -48,6 +50,10 @@ public class CodePieceService {
         codePieceEntity.setPasswordHash(hashedPassword);
         codePieceEntity.setOwnerName(req.getOwnerName());
 
+        final LocalDateTime now = LocalDateTime.now();
+        codePieceEntity.setCreatedAt(now);
+        codePieceEntity.setUpdatedAt(now);
+
         codePieceRepository.save(codePieceEntity);
     }
 
@@ -84,6 +90,9 @@ public class CodePieceService {
             originCodePiece.setOwnerName(req.getOwnerName());
         }
 
+        final LocalDateTime now = LocalDateTime.now();
+        originCodePiece.setUpdatedAt(now);
+
         codePieceRepository.save(originCodePiece);
     }
 
@@ -100,18 +109,22 @@ public class CodePieceService {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        codePieceRepository.deleteById(id);
+        final LocalDateTime now = LocalDateTime.now();
+        originCodePiece.setDeletedAt(now);
+
+        codePieceRepository.save(originCodePiece);
     }
 
     public CodePieceDetailRes getCodePieceById(Long id) {
-        final CodePieceEntity codePieceEntity = codePieceRepository.findById(id).orElse(null);
+        final CodePieceEntity codePieceEntity = getCodePieceEntity(id);
         if (codePieceEntity == null) {
             throw new IllegalArgumentException("Code piece not found");
         }
+
         return CodePieceDetailRes.fromEntity(codePieceEntity);
     }
 
     public Page<CodePieceSummaryRes> getAllCodePieces(Long spaceId, Pageable pageable) {
-        return codePieceRepository.findAllBySpaceId(spaceId, pageable).map(CodePieceSummaryRes::fromEntity);
+        return codePieceRepository.findAllBySpaceIdAndDeletedAtIsNull(spaceId, pageable).map(CodePieceSummaryRes::fromEntity);
     }
 }

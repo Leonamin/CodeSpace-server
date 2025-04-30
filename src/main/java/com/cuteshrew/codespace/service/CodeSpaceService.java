@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class CodeSpaceService {
     private final CodeSpaceRepository codeSpaceRepository;
@@ -30,6 +32,11 @@ public class CodeSpaceService {
         codeSpaceEntity.setDescription(req.getDescription());
         codeSpaceEntity.setPasswordHash(hashedPassword);
         codeSpaceEntity.setOwnerName(req.getOwnerName());
+
+        final LocalDateTime now = LocalDateTime.now();
+
+        codeSpaceEntity.setCreatedAt(now);
+        codeSpaceEntity.setUpdatedAt(now);
 
         codeSpaceRepository.save(codeSpaceEntity);
     }
@@ -58,6 +65,9 @@ public class CodeSpaceService {
             originCodeSpace.setOwnerName(req.getOwnerName());
         }
 
+        final LocalDateTime now = LocalDateTime.now();
+        originCodeSpace.setUpdatedAt(now);
+
         codeSpaceRepository.save(originCodeSpace);
     }
 
@@ -74,7 +84,10 @@ public class CodeSpaceService {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        codeSpaceRepository.deleteById(id);
+        final LocalDateTime now = LocalDateTime.now();
+        originCodeSpace.setDeletedAt(now);
+
+        codeSpaceRepository.save(originCodeSpace);
     }
 
     public CodeSpaceSummaryRes getCodeSpaceById(Long id) {
@@ -86,6 +99,6 @@ public class CodeSpaceService {
     }
 
     public Page<CodeSpaceSummaryRes> getAllCodeSpaces(Pageable pageable) {
-        return codeSpaceRepository.findAll(pageable).map(CodeSpaceSummaryRes::fromEntity);
+        return codeSpaceRepository.findAllByDeletedAtIsNull(pageable).map(CodeSpaceSummaryRes::fromEntity);
     }
 }
