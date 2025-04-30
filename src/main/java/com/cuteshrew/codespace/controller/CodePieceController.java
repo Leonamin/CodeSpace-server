@@ -48,7 +48,7 @@ public class CodePieceController {
     }
 
     @GetMapping
-    public List<CodePieceSummaryRes> getAllCodePieces(@RequestParam Long spaceId, Pageable pageable) {
+    public List<CodePieceSummaryRes> getAllCodePieces(@RequestParam(name = "space_id") Long spaceId, Pageable pageable) {
         return codePieceService.getAllCodePieces(spaceId, pageable).getContent();
     }
 
