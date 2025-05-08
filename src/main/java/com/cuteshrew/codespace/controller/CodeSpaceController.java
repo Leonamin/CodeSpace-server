@@ -11,7 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/codespaces")
@@ -20,26 +22,32 @@ public class CodeSpaceController {
     private final CodeSpaceService codeSpaceService;
 
     @PostMapping
-    public void createCodeSpace(@RequestBody @Validated CodeSpaceCreateReq req) {
+    public Map<Object, Object> createCodeSpace(@RequestBody @Validated CodeSpaceCreateReq req) {
         codeSpaceService.createCodeSpace(req);
+
+        return Collections.emptyMap();
     }
 
     @PutMapping("/{id}")
-    public void updateCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceUpdateReq req) {
+    public Map<Object, Object> updateCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceUpdateReq req) {
         if (id == null) {
             throw new IllegalArgumentException("Code piece id not found");
         }
 
         codeSpaceService.updateCodeSpace(id, req);
+
+        return Collections.emptyMap();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceDeleteReq req) {
+    public Map<Object, Object> deleteCodeSpace(@PathVariable Long id, @RequestBody @Validated CodeSpaceDeleteReq req) {
         if (id == null) {
             throw new IllegalArgumentException("Code piece id not found");
         }
 
         codeSpaceService.deleteCodeSpace(id, req.getPassword());
+
+        return Collections.emptyMap();
     }
 
     @GetMapping("/{id}")

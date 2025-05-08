@@ -7,7 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/codepieces")
@@ -16,26 +18,32 @@ public class CodePieceController {
     private final CodePieceService codePieceService;
 
     @PostMapping
-    public void createCodePiece(@RequestBody @Validated CodePieceCreateReq req) {
+    public Map<Object, Object> createCodePiece(@RequestBody @Validated CodePieceCreateReq req) {
         codePieceService.createCodePiece(req);
+
+        return Collections.emptyMap();
     }
 
     @PutMapping("/{id}")
-    public void updateCodePiece(@PathVariable Long id, @RequestBody @Validated CodePieceUpdateReq req) {
+    public Map<Object, Object> updateCodePiece(@PathVariable Long id, @RequestBody @Validated CodePieceUpdateReq req) {
         if (id == null) {
             throw new IllegalArgumentException("Code piece id not found");
         }
 
         codePieceService.updateCodePiece(id, req);
+
+        return Collections.emptyMap();
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCodePiece(@PathVariable Long id, @RequestBody @Validated CodePieceDeleteReq req) {
+    public Map<Object, Object> deleteCodePiece(@PathVariable Long id, @RequestBody @Validated CodePieceDeleteReq req) {
         if (id == null) {
             throw new IllegalArgumentException("Code piece id not found");
         }
 
         codePieceService.deleteCodePiece(id, req.getPassword());
+
+        return Collections.emptyMap();
     }
 
     @GetMapping("/{id}")
