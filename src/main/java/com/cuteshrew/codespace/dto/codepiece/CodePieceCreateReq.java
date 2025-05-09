@@ -22,7 +22,7 @@ public class CodePieceCreateReq {
     private String description;
 
     @NotBlank(message = "Language cannot be blank")
-    @Size(min = 3, max = 100, message = "Language must be between 3 and 100 characters")
+    @Size(min = 1, max = 100, message = "Language must be between 3 and 100 characters")
     private String language;
 
     @NotBlank(message = "Code cannot be blank")
