@@ -12,7 +12,7 @@ public class CodePieceUpdateReq {
     @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
     private String name;
 
-    @Size(max = 1000, message = "Description cannot be more than 1000 characters")
+    @Size(max = 10000, message = "Description cannot be more than 1000 characters")
     private String description;
 
     @Size(min = 3, max = 100, message = "Language must be between 3 and 100 characters")

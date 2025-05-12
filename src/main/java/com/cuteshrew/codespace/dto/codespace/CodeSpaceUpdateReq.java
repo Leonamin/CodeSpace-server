@@ -18,6 +18,6 @@ public class CodeSpaceUpdateReq {
     @Size(min = 1, max = 20, message = "OwnerName must be between 1 and 20 characters")
     private String ownerName;
 
-    @Size(max = 1000, message = "Description cannot be more than 1000 characters")
+    @Size(max = 10000, message = "Description cannot be more than 1000 characters")
     private String description;
 }
